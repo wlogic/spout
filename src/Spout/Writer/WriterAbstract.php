@@ -95,11 +95,11 @@ abstract class WriterAbstract implements WriterInterface
     /**
      * {@inheritdoc}
      */
-    public function openToFile($outputFilePath)
+    public function openToFile($outputFilePath, string $mode = 'wb+')
     {
         $this->outputFilePath = $outputFilePath;
 
-        $this->filePointer = $this->globalFunctionsHelper->fopen($this->outputFilePath, 'wb+');
+        $this->filePointer = $this->globalFunctionsHelper->fopen($this->outputFilePath, $mode);
         $this->throwIfFilePointerIsNotAvailable();
 
         $this->openWriter();

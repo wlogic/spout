@@ -18,7 +18,7 @@ interface WriterInterface
      * @throws \Box\Spout\Common\Exception\IOException If the writer cannot be opened or if the given path is not writable
      * @return WriterInterface
      */
-    public function openToFile($outputFilePath);
+    public function openToFile($outputFilePath, string $mode = 'wb+');
 
     /**
      * Initializes the writer and opens it to accept data.
