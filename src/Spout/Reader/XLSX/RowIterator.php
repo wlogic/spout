@@ -125,7 +125,7 @@ class RowIterator implements IteratorInterface
      * @return string Path of the XML file containing the sheet data,
      *                without the leading slash.
      */
-    protected function normalizeSheetDataXMLFilePath($sheetDataXMLFilePath)
+    protected function normalizeSheetDataXMLFilePath($sheetDataXMLFilePath): string
     {
         return \ltrim($sheetDataXMLFilePath, '/');
     }
@@ -139,7 +139,7 @@ class RowIterator implements IteratorInterface
      * @throws \Box\Spout\Common\Exception\IOException If the sheet data XML cannot be read
      * @return void
      */
-    public function rewind() : void
+    public function rewind(): void
     {
         $this->xmlReader->close();
 
@@ -163,7 +163,7 @@ class RowIterator implements IteratorInterface
      *
      * @return bool
      */
-    public function valid() : bool
+    public function valid(): bool
     {
         return (!$this->hasReachedEndOfFile);
     }
@@ -176,7 +176,7 @@ class RowIterator implements IteratorInterface
      * @throws \Box\Spout\Common\Exception\IOException If unable to read the sheet data XML
      * @return void
      */
-    public function next() : void
+    public function next(): void
     {
         $this->nextRowIndexToBeProcessed++;
 
@@ -197,7 +197,7 @@ class RowIterator implements IteratorInterface
      *
      * @return bool Whether we need data for the next row to be processed.
      */
-    protected function doesNeedDataForNextRowToBeProcessed()
+    protected function doesNeedDataForNextRowToBeProcessed(): bool
     {
         $hasReadAtLeastOneRow = ($this->lastRowIndexProcessed !== 0);
 
@@ -213,7 +213,7 @@ class RowIterator implements IteratorInterface
      * @throws \Box\Spout\Common\Exception\IOException If unable to read the sheet data XML
      * @return void
      */
-    protected function readDataForNextRow()
+    protected function readDataForNextRow(): void
     {
         $this->currentlyProcessedRow = $this->entityFactory->createRow();
 
@@ -230,7 +230,7 @@ class RowIterator implements IteratorInterface
      * @param \Box\Spout\Reader\Wrapper\XMLReader $xmlReader XMLReader object, positioned on a "<dimension>" starting node
      * @return int A return code that indicates what action should the processor take next
      */
-    protected function processDimensionStartingNode($xmlReader)
+    protected function processDimensionStartingNode($xmlReader): int
     {
         // Read dimensions of the sheet
         $dimensionRef = $xmlReader->getAttribute(self::XML_ATTRIBUTE_REF); // returns 'A1:M13' for instance (or 'A1' for empty sheet)
@@ -245,7 +245,7 @@ class RowIterator implements IteratorInterface
      * @param \Box\Spout\Reader\Wrapper\XMLReader $xmlReader XMLReader object, positioned on a "<row>" starting node
      * @return int A return code that indicates what action should the processor take next
      */
-    protected function processRowStartingNode($xmlReader)
+    protected function processRowStartingNode($xmlReader): int
     {
         // Reset index of the last processed column
         $this->lastColumnIndexProcessed = -1;
@@ -271,7 +271,7 @@ class RowIterator implements IteratorInterface
      * @param \Box\Spout\Reader\Wrapper\XMLReader $xmlReader XMLReader object, positioned on a "<cell>" starting node
      * @return int A return code that indicates what action should the processor take next
      */
-    protected function processCellStartingNode($xmlReader)
+    protected function processCellStartingNode($xmlReader): int
     {
         $currentColumnIndex = $this->getColumnIndex($xmlReader);
 
@@ -289,7 +289,7 @@ class RowIterator implements IteratorInterface
     /**
      * @return int A return code that indicates what action should the processor take next
      */
-    protected function processRowEndingNode()
+    protected function processRowEndingNode(): int
     {
         // if the fetched row is empty and we don't want to preserve it..,
         if (!$this->shouldPreserveEmptyRows && $this->rowManager->isEmpty($this->currentlyProcessedRow)) {
@@ -312,7 +312,7 @@ class RowIterator implements IteratorInterface
     /**
      * @return int A return code that indicates what action should the processor take next
      */
-    protected function processWorksheetEndingNode()
+    protected function processWorksheetEndingNode(): int
     {
         // The closing "</worksheet>" marks the end of the file
         $this->hasReachedEndOfFile = true;
@@ -325,7 +325,7 @@ class RowIterator implements IteratorInterface
      * @throws \Box\Spout\Common\Exception\InvalidArgumentException When the given cell index is invalid
      * @return int Row index
      */
-    protected function getRowIndex($xmlReader)
+    protected function getRowIndex($xmlReader): int
     {
         // Get "r" attribute if present (from something like <row r="3"...>
         $currentRowIndex = $xmlReader->getAttribute(self::XML_ATTRIBUTE_ROW_INDEX);
@@ -340,7 +340,7 @@ class RowIterator implements IteratorInterface
      * @throws \Box\Spout\Common\Exception\InvalidArgumentException When the given cell index is invalid
      * @return int Column index
      */
-    protected function getColumnIndex($xmlReader)
+    protected function getColumnIndex($xmlReader): int
     {
         // Get "r" attribute if present (from something like <c r="A1"...>
         $currentCellIndex = $xmlReader->getAttribute(self::XML_ATTRIBUTE_CELL_INDEX);
@@ -356,7 +356,7 @@ class RowIterator implements IteratorInterface
      * @param \DOMElement $node
      * @return Cell The cell set with the associated with the cell
      */
-    protected function getCell($node)
+    protected function getCell($node): Cell
     {
         try {
             $cellValue = $this->cellValueFormatter->extractAndFormatNodeValue($node);
@@ -375,7 +375,7 @@ class RowIterator implements IteratorInterface
      *
      * @return Row|null
      */
-    public function current() : ?Row
+    public function current(): ?Row
     {
         $rowToBeProcessed = $this->rowBuffer;
 
@@ -400,7 +400,7 @@ class RowIterator implements IteratorInterface
      *
      * @return int
      */
-    public function key() : int
+    public function key(): int
     {
         // TODO: This should return $this->nextRowIndexToBeProcessed
         //       but to avoid a breaking change, the return value for
@@ -415,7 +415,7 @@ class RowIterator implements IteratorInterface
      *
      * @return void
      */
-    public function end() : void
+    public function end(): void
     {
         $this->xmlReader->close();
     }
