@@ -20,7 +20,7 @@ class XMLReader extends \XMLReader
      * @param string $fileInsideZipPath Relative or absolute path of the file inside the zip
      * @return bool TRUE on success or FALSE on failure
      */
-    public function openFileInZip($zipFilePath, $fileInsideZipPath)
+    public function openFileInZip($zipFilePath, $fileInsideZipPath): bool
     {
         $wasOpenSuccessful = false;
         $realPathURI = $this->getRealPathURIForFileInZip($zipFilePath, $fileInsideZipPath);
@@ -43,7 +43,7 @@ class XMLReader extends \XMLReader
      * @param string $fileInsideZipPath Relative or absolute path of the file inside the zip
      * @return string The real path URI
      */
-    public function getRealPathURIForFileInZip($zipFilePath, $fileInsideZipPath)
+    public function getRealPathURIForFileInZip($zipFilePath, $fileInsideZipPath): string
     {
         // The file path should not start with a '/', otherwise it won't be found
         $fileInsideZipPathWithoutLeadingSlash = \ltrim($fileInsideZipPath, '/');
@@ -57,7 +57,7 @@ class XMLReader extends \XMLReader
      * @param string $zipStreamURI URI of a zip stream, e.g. "zip://file.zip#path/inside.xml"
      * @return bool TRUE if the file exists, FALSE otherwise
      */
-    protected function fileExistsWithinZip($zipStreamURI)
+    protected function fileExistsWithinZip($zipStreamURI): bool
     {
         $doesFileExists = false;
 
@@ -83,7 +83,7 @@ class XMLReader extends \XMLReader
      * @throws \Box\Spout\Reader\Exception\XMLProcessingException If an error/warning occurred
      * @return bool TRUE on success or FALSE on failure
      */
-    public function read()
+    public function read(): bool
     {
         $this->useXMLInternalErrors();
 
@@ -101,7 +101,7 @@ class XMLReader extends \XMLReader
      * @throws \Box\Spout\Reader\Exception\XMLProcessingException If an error/warning occurred
      * @return bool TRUE on success or FALSE on failure
      */
-    public function readUntilNodeFound($nodeName)
+    public function readUntilNodeFound($nodeName): bool
     {
         do {
             $wasReadSuccessful = $this->read();
@@ -119,7 +119,7 @@ class XMLReader extends \XMLReader
      * @throws \Box\Spout\Reader\Exception\XMLProcessingException If an error/warning occurred
      * @return bool TRUE on success or FALSE on failure
      */
-    public function next($localName = null)
+    public function next($localName = null): bool
     {
         $this->useXMLInternalErrors();
 
@@ -134,7 +134,7 @@ class XMLReader extends \XMLReader
      * @param string $nodeName
      * @return bool Whether the XML Reader is currently positioned on the starting node with given name
      */
-    public function isPositionedOnStartingNode($nodeName)
+    public function isPositionedOnStartingNode($nodeName): bool
     {
         return $this->isPositionedOnNode($nodeName, self::ELEMENT);
     }
@@ -143,7 +143,7 @@ class XMLReader extends \XMLReader
      * @param string $nodeName
      * @return bool Whether the XML Reader is currently positioned on the ending node with given name
      */
-    public function isPositionedOnEndingNode($nodeName)
+    public function isPositionedOnEndingNode($nodeName): bool
     {
         return $this->isPositionedOnNode($nodeName, self::END_ELEMENT);
     }
@@ -153,7 +153,7 @@ class XMLReader extends \XMLReader
      * @param int $nodeType
      * @return bool Whether the XML Reader is currently positioned on the node with given name and type
      */
-    private function isPositionedOnNode($nodeName, $nodeType)
+    private function isPositionedOnNode($nodeName, $nodeType): bool
     {
         // In some cases, the node has a prefix (for instance, "<sheet>" can also be "<x:sheet>").
         // So if the given node name does not have a prefix, we need to look at the unprefixed name ("localName").
@@ -167,7 +167,7 @@ class XMLReader extends \XMLReader
     /**
      * @return string The name of the current node, un-prefixed
      */
-    public function getCurrentNodeName()
+    public function getCurrentNodeName(): string
     {
         return $this->localName;
     }
